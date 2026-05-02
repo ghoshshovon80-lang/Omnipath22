@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniPath — Learning OS for YouTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="layout">
+        <header>
+            <div class="logo">OmniPath</div>
+            <div class="nav-actions">
+                <button class="nav-link" onclick="showSection('landing')">Home</button>
+                <button class="nav-link" onclick="showSection('roadmap')">Roadmap</button>
+                <button class="nav-link" onclick="showSection('focus')">Focus Mode</button>
+                <button class="nav-link" onclick="showSection('profile')">My Paths</button>
+                <button class="nav-btn" onclick="handleAuth()">Login / Signup</button>
+            </div>
+        </header>
+
+        <main>
+            <section id="landing" class="page active">
+                <div class="hero">
+                    <div>
+                        <h1>Turn YouTube into a structured learning OS.</h1>
+                        <p>OmniPath builds a step-by-step curriculum from free video content, so self-taught students can study with confidence instead of wandering through tutorial chaos.</p>
+                    </div>
+
+                    <div class="search-panel">
+                        <div class="search-row">
+                            <input id="searchInput" type="text" placeholder="What do you want to learn today? e.g. Python for data science" />
+                            <button id="generateBtn" class="btn-primary" onclick="generateRoadmap()">Generate roadmap</button>
+                        </div>
+                        <p class="small-note">AI-generated titles, descriptions and topic flow appear instantly. Start with a skill and follow a curated playlist.</p>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <h2>Trending Roadmaps</h2>
+                    <span class="highlight-pill">Ready-made paths</span>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="card">
+                        <h3>Full-stack Web Developer</h3>
+                        <p>HTML, CSS, JavaScript, React, backend logic and deployment fundamentals.</p>
+                        <button onclick="loadTrending('Full-stack Web Development')">Explore path</button>
+                    </article>
+                    <article class="card">
+                        <h3>AI Product Builder</h3>
+                        <p>Prompt design, model integration, product flows and practical demos.</p>
+                        <button onclick="loadTrending('AI Product Builder')">Explore path</button>
+                    </article>
+                    <article class="card">
+                        <h3>Data Science Roadmap</h3>
+                        <p>Python, statistics, machine learning, and project-based model deployment.</p>
+                        <button onclick="loadTrending('Data Science Roadmap')">Explore path</button>
+                    </article>
+                </div>
+
+                <div class="section-title" style="margin-top: 52px;">
+                    <h2>How it works</h2>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon">🧭</div>
+                        <h3>AI-Generated Roadmaps</h3>
+                        <p>One input becomes a full skill map with sequenced video nodes, knowledge checks and completion goals.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Focused Study Mode</h3>
+                        <p>Watch videos, follow the syllabus, and keep your attention on one topic at a time.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Progress that saves</h3>
+                        <p>Track watched videos, completion percentages, and study streaks locally so you can resume instantly.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="roadmap" class="page">
+                <div class="section-title">
+                    <div>
+                        <h2>Roadmap Explorer</h2>
+                        <p class="small-note">A visual path for the skill you selected, broken into logical modules and video milestones.</p>
+                    </div>
+                    <button class="btn-primary" onclick="showSection('focus')">Open Focus Mode</button>
+                </div>
+
+                <div class="roadmap-shell">
+                    <div class="panel">
+                        <div class="section-title">
+                            <h3>Current roadmap</h3>
+                            <span class="highlight-pill" id="roadmapTopic">Python for data science</span>
+                        </div>
+                        <div class="roadmap-visual" id="roadmapSteps"></div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="section-title">
+                            <h3>Estimated completion</h3>
+                        </div>
+                        <p class="small-note">This path spans 10 curated steps, designed to move from beginner to confident learner.</p>
+                        <div class="timeline">
+                            <div class="timeline-item"><strong>10</strong><span>Estimated lessons</span></div>
+                            <div class="timeline-item"><strong>7–9 hrs</strong><span>Weekly study target</span></div>
+                            <div class="timeline-item"><strong>4 weeks</strong><span>Target completion</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="focus" class="page">
+                <div class="section-title">
+                    <div>
+                        <h2>Unified Learning Dashboard</h2>
+                        <p class="small-note">Your study session in one view: video, playlist, progress, and AI help.</p>
+                    </div>
+                    <button class="btn-primary" onclick="showSection('landing')">New search</button>
+                </div>
+
+                <div class="grid-2">
+                    <div class="focus-player" id="videoContainer">
+                        <iframe id="focusIframe" src="https://www.youtube.com/embed/M7lc1UVf-VE?rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="focus-sidebar">
+                        <div class="panel">
+                            <h3>Course playlist</h3>
+                            <div class="progress-track"><div class="progress-fill" id="courseProgress"></div></div>
+                            <p class="small-note" id="progressText">24% complete • 2 / 10 lessons watched</p>
+                            <div class="lesson-list" id="lessonList"></div>
+                        </div>
+
+                        <div class="panel ask-panel">
+                            <h3>Ask AI</h3>
+                            <p class="small-note">Get quick concept help for the current lesson without leaving the video.</p>
+                            <textarea id="askInput" placeholder="Ask about loops, functions, or this video’s concept..."></textarea>
+                            <button onclick="askAI()">Ask now</button>
+                            <p id="askResponse" class="small-note" style="margin-top: 14px; white-space: pre-wrap;"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="profile" class="page">
+                <div class="section-title">
+                    <div>
+                        <h2>My Paths</h2>
+                        <p class="small-note">Track in-progress journeys, certificates, and your learning streak.</p>
+                    </div>
+                    <button class="btn-primary" onclick="showSection('focus')">Resume last path</button>
+                </div>
+
+                <div class="profile-shell">
+                    <div class="panel badge-card">
+                        <h3>In Progress</h3>
+                        <div class="timeline-item"><strong>Python for data science</strong><span>3 / 10 lessons completed</span></div>
+                        <div class="timeline-item"><strong>Roadmap progress</strong><span>24% complete</span></div>
+                        <div class="timeline-item"><strong>Next step</strong><span>Variables & types</span></div>
+                    </div>
+                    <div class="panel certificate">
+                        <h3>Visual credential</h3>
+                        <p class="small-note">When you finish a path, OmniPath shows a premium certificate-style card in your profile.</p>
+                        <div class="streak">7-day streak</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
